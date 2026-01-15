@@ -1,0 +1,194 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy 18th, Goldfish 🎂</title>  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Pacifico&display=swap" rel="stylesheet">  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #fde2f3, #fff1f2, #e0f2fe);
+      overflow: hidden;
+    }
+
+    .screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 20px;
+      transition: opacity 1.2s ease, transform 1.2s ease;
+    }
+
+    .hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(1.05);
+    }
+
+    h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 3rem;
+      color: #ec4899;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    p {
+      max-width: 600px;
+      text-align: center;
+      color: #555;
+      line-height: 1.7;
+      margin-bottom: 25px;
+    }
+
+    button {
+      background: linear-gradient(135deg, #f472b6, #ec4899);
+      color: white;
+      border: none;
+      padding: 14px 30px;
+      border-radius: 40px;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+    }
+
+    button:hover { transform: scale(1.05); }
+
+    /* Memory Map */
+    .map {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 25px;
+      width: 90%;
+      max-width: 800px;
+    }
+
+    .node {
+      background: rgba(255,255,255,0.75);
+      border-radius: 22px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+      transition: transform 0.4s ease;
+    }
+
+    .node:hover { transform: translateY(-10px) scale(1.05); }
+
+    .node span {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    /* Gallery */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      width: 90%;
+      max-width: 900px;
+    }
+
+    .frame {
+      background: white;
+      padding: 12px;
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    }
+
+    .frame img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      border-radius: 15px;
+    }
+
+    audio { display: none; }
+  </style></head>
+<body><!-- SCREEN 1 --><div class="screen" id="screen1">
+  <h1>Happy 18th, Goldfish 🎀</h1>
+  <p>
+    This is just a small space made to celebrate you today.
+  </p>
+  <button onclick="goToMap()">Open Your Day ✨</button>
+</div><!-- SCREEN 2 --><div class="screen hidden" id="screen2">
+  <h1>Your Little World 🗺️</h1>
+  <div class="map">
+    <div class="node" onclick="openGallery('folder1')"><span>🌸</span>Soft Memories</div>
+    <div class="node" onclick="openGallery('folder2')"><span>🌊</span>Calm You</div>
+    <div class="node" onclick="openGallery('folder3')"><span>✨</span>My Favorite</div>
+    <div class="node" onclick="openGallery('folder4')"><span>💌</span>Just You</div>
+  </div>
+</div><!-- SCREEN 3 --><div class="screen hidden" id="screen3">
+  <h1 id="galleryTitle"></h1>
+  <p id="galleryMessage"></p>
+  <div class="gallery" id="gallery"></div>
+  <button style="margin-top:30px" onclick="backToMap()">Go Back</button>
+  <p style="max-width:600px;margin-top:25px;color:#555;text-align:center;font-size:0.95rem">
+    Hey Goldfish, you may forget many things,<n    but you never forgot to become someone I care about the most.<br>
+    I hope this year gives you moments worth remembering.
+  </p>
+</div><audio id="song" loop>
+  <source src="song.mp3" type="audio/mpeg">
+</audio><script>
+  const galleries = {
+    folder1: {
+      title: 'Soft Memories 🌸',
+      message: 'Goldfish memories might fade quickly, but some moments stay warm no matter what.',
+      images: ['f1-1.jpg','f1-2.jpg','f1-3.jpg']
+    },
+    folder2: {
+      title: 'Calm You 🌊',
+      message: 'You have a calm way of making things feel lighter, Goldfish. I hope life stays gentle with you as you grow.',
+      images: ['f2-1.jpg','f2-2.jpg']
+    },
+    folder3: {
+      title: 'My Favorite ✨',
+      message: 'If I’m being honest, Goldfish, meeting you made this year a happier one for me. Ever since May 25, every day has felt a little brighter.',
+      images: ['f3-1.jpg','f3-2.jpg','f3-3.jpg']
+    },
+    folder4: {
+      title: 'Just You 💌',
+      message: 'No labels. No reasons. Just you — exactly as you are right now.',
+      images: ['f4-1.jpg']
+    }
+  };
+
+  function goToMap() {
+    document.getElementById('screen1').classList.add('hidden');
+    document.getElementById('screen2').classList.remove('hidden');
+    document.getElementById('song').play();
+  }
+
+  function openGallery(folder) {
+    const gallery = document.getElementById('gallery');
+    const title = document.getElementById('galleryTitle');
+    const msg = document.getElementById('galleryMessage');
+
+    gallery.innerHTML = '';
+    title.innerText = galleries[folder].title;
+    msg.innerText = galleries[folder].message;
+
+    galleries[folder].images.forEach(img => {
+      const div = document.createElement('div');
+      div.className = 'frame';
+      div.innerHTML = `<img src="${folder}/${img}">`;
+      gallery.appendChild(div);
+    });
+
+    document.getElementById('screen2').classList.add('hidden');
+    document.getElementById('screen3').classList.remove('hidden');
+  }
+
+  function backToMap() {
+    document.getElementById('screen3').classList.add('hidden');
+    document.getElementById('screen2').classList.remove('hidden');
+  }
+</script></body>
+</html>
